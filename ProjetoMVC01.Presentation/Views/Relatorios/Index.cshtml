@@ -1,0 +1,40 @@
+﻿@model ProjetoMVC01.Presentation.Models.RelatoriosViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h5>Relatórios</h5>
+<p>Selecione o tipo e formato de relatório desejado:</p>
+<hr />
+
+@using (Html.BeginForm())
+{
+    <label><strong>Tipo de Relatório:</strong></label>
+    <div>
+        @Html.RadioButtonFor(model => model.TipoRelatorio, 1) <span>Relatório de Fornecedores</span>
+    </div>
+    <div>
+        @Html.RadioButtonFor(model => model.TipoRelatorio, 2) <span>Relatório de Produtos</span>
+    </div>
+    <div class="text-danger">
+        @Html.ValidationMessageFor(model => model.TipoRelatorio)
+    </div>
+    <br />
+
+    <label><strong>Formato do Relatório:</strong></label>
+    <div>
+        @Html.RadioButtonFor(model => model.FormatoRelatorio, 1) <span>Planilha Excel</span>
+    </div>
+    <div>
+        @Html.RadioButtonFor(model => model.FormatoRelatorio, 2) <span>Documento PDF</span>
+    </div>
+    <div class="text-danger">
+        @Html.ValidationMessageFor(model => model.FormatoRelatorio)
+    </div>
+    <br />
+
+    <input type="submit" value="Gerar Relatório"
+           class="btn btn-success"/>
+}

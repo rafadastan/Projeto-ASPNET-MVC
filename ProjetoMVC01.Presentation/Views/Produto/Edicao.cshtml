@@ -1,0 +1,80 @@
+﻿@model ProjetoMVC01.Presentation.Models.ProdutoEdicaoViewModel
+
+@{
+    ViewData["Title"] = "Edicao";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h5>Alteração de Produto</h5>
+<p>Utilize o formulário abaixo:</p>
+<hr />
+
+@using (Html.BeginForm("Edicao", "Produto", FormMethod.Post,
+     new { @enctype = "multipart/form-data" }))
+{
+    <!-- campo oculto para armazenar o id do produto -->
+    @Html.HiddenFor(model => model.IdProduto)
+
+    <div class="row">
+
+        <div class="col-md-4">
+
+            <label>Nome do Produto:</label>
+            @Html.TextBoxFor(model => model.Nome, new { @class = "form-control" })
+            <div class="text-danger">
+                @Html.ValidationMessageFor(model => model.Nome)
+            </div>
+            <br />
+
+            <label>Preço:</label>
+            @Html.TextBoxFor(model => model.Preco, new { @class = "form-control" })
+            <div class="text-danger">
+                @Html.ValidationMessageFor(model => model.Preco)
+            </div>
+            <br />
+
+            <label>Quantidade:</label>
+            @Html.TextBoxFor(model => model.Quantidade, new { @class = "form-control" })
+            <div class="text-danger">
+                @Html.ValidationMessageFor(model => model.Quantidade)
+            </div>
+            <br />
+
+        </div>
+
+        <div class="col-md-8">
+
+            <label>Fornecedor do produto:</label>
+            @Html.DropDownListFor(model => model.IdFornecedor, Model.ListagemFornecedores,
+                "Escolha uma opção", new { @class = "form-select" })
+            <div class="text-danger">
+                @Html.ValidationMessageFor(model => model.IdFornecedor)
+            </div>
+            <br />
+
+            <label>Foto do produto:</label>
+            <input type="file" name="foto" class="form-control" />
+            <br />
+
+            <label>Descrição do produto:</label>
+            @Html.TextAreaFor(model => model.Descricao, new { @class = "form-control" })
+            <div class="text-danger">
+                @Html.ValidationMessageFor(model => model.Descricao)
+            </div>
+            <br />
+
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <input type="submit" value="Salvar Alterações"
+                   class="btn btn-primary" />
+        </div>
+    </div>
+
+}
+
+
+

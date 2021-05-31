@@ -1,0 +1,148 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAcessor
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Projeto MVC 01</title>
+
+    <!-- folhas de estilo CSS -->
+    <link href="~/css/bootstrap.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+</head>
+<body>
+
+    <!-- Conteudo do menu do projeto -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Projeto MVC 01</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/Home/Index">Página Inicial</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Gerenciar Fornecedores
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/Fornecedor/Cadastro">Cadastro de Fornecedores</a></li>
+                            <li><a class="dropdown-item" href="/Fornecedor/Consulta">Consulta de Fornecedores</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Gerenciar Produtos
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/Produto/Cadastro">Cadastro de Produtos</a></li>
+                            <li><a class="dropdown-item" href="/Produto/Consulta">Consulta de Produtos</a></li>
+                        </ul>
+                    </li>
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Relatorios/Index">Relatórios</a>
+                        </li>
+                    }
+                </ul>
+                <form class="d-flex">
+                    <span class="text-white mt-2" style="margin-right: 20px;">
+                        <a href="#" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#dadosusuario">
+                            @HttpContextAcessor.HttpContext.Session.GetString("nome_usuario")
+                        </a>
+                    </span>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    @if (TempData["MensagemSucesso"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>@TempData["MensagemSucesso"]</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    else if (TempData["MensagemAlerta"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>@TempData["MensagemAlerta"]</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    else if (TempData["MensagemErro"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>@TempData["MensagemErro"]</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="container mt-4">
+        <!-- local onde será renderizado o conteudo das demais páginas -->
+        @RenderBody()
+    </div>
+
+    <!-- Janela contendo os dados do usuario autenticado -->
+    <div class="modal fade" id="dadosusuario" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Usuário Autenticado</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <strong>@HttpContextAcessor.HttpContext.Session.GetString("nome_usuario")</strong>
+                    </div>
+                    <div>
+                        @HttpContextAcessor.HttpContext.Session.GetString("email_usuario")
+                    </div>
+                    <div>
+                        @if (!string.IsNullOrEmpty(HttpContextAcessor.HttpContext.Session.GetString("perfil_usuario")))
+                        {
+                            <span>Perfil de Acesso:</span> @HttpContextAcessor.HttpContext.Session.GetString("perfil_usuario")
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="/Account/Logout" class="btn btn-secondary">Sair do Sistema</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- arquivos javascript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+    <script src="~/js/bootstrap.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $(".focus").focus();
+
+            $('#grid_dados').DataTable({
+                "oLanguage": {
+                    "sUrl": "https://cdn.datatables.net/plug-ins/1.10.22/i18n/Portuguese-Brasil.json"
+                }
+            });
+        });
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

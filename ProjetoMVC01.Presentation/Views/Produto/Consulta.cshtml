@@ -1,0 +1,91 @@
+﻿@model ProjetoMVC01.Presentation.Models.ProdutoConsultaViewModel
+
+@{
+    ViewData["Title"] = "Consulta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h5>Consulta de Produtos</h5>
+<p>Pesquise os produtos desejados:</p>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        @using (Html.BeginForm("Consulta", "Produto", FormMethod.Post))
+        {
+            <label>Nome do Produto:</label>
+            @Html.TextBoxFor(model => model.Nome, new { @class = "form-control" })
+            <div class="text-danger">
+                @Html.ValidationMessageFor(model => model.Nome)
+            </div>
+            <br />
+
+            <input type="submit" value="Pesquisar Produtos"
+                   class="btn btn-success" />
+        }
+    </div>
+</div>
+
+@if (Model != null)
+{
+    if (Model.Produtos != null && Model.Produtos.Count > 0)
+    {
+        <div class="row mt-4">
+            <div class="col-md-12">
+
+                <table id="grid_dados" class="table">
+                    <thead>
+                        <tr>
+                            <th>Foto</th>
+                            <th>Nome do Produto</th>
+                            <th>Preço</th>
+                            <th>Quantidade</th>
+                            <th>Descrição</th>
+                            <th>Fornecedor</th>
+                            <th>Operações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Produtos)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    <img src="@item.Foto?@DateTime.Now" class="img-fluid" width="60" />
+                                </td>
+                                <td>@item.Nome</td>
+                                <td>@item.Preco.ToString("c")</td>
+                                <td>@item.Quantidade</td>
+                                <td>@item.Descricao</td>
+                                <td>
+                                    @item.Fornecedor.Nome <br/>
+                                    <small>CNPJ: @item.Fornecedor.Cnpj</small>
+                                </td>
+                                <td>
+                                    <a href="/Produto/Edicao?id=@item.IdProduto" 
+                                       class="btn btn-primary btn-sm">
+                                        Alterar
+                                    </a>
+                                    <a href="/Produto/Exclusao?id=@item.IdProduto"
+                                       onclick="return confirm('Deseja excluir o produto @item.Nome?')"
+                                       class="btn btn-danger btn-sm">
+                                        Excluir
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                Quantidade de registros: @Model.Produtos.Count
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+        </div>
+    }
+}
+
+

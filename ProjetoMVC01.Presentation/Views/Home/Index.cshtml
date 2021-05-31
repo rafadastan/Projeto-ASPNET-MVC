@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div id="graficoFornecedores"></div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            //acessando o método JsonResult para obter os dados do grafico..
+            $.ajax({
+                type: 'POST', //chamada ao servidor
+                url: '/Fornecedor/ObterDadosGrafico', //endereço
+                data: {}, //dados enviados para o servidor
+                success: function (result) { //captura a resposta de sucesso..
+
+                    var array = [];
+
+                    for (var i = 0; i < result.length; i++) {
+                        array.push([
+                            result[i].name, result[i].data[0]
+                        ]);
+                    }
+
+                    new Highcharts.Chart({
+                        chart: {
+                            type: 'pie',
+                            renderTo: 'graficoFornecedores'
+                        },
+                        title: {
+                            text : 'Quantidade de produtos por fornecedor'
+                        },
+                        subtitle: {
+                            text : 'Somatório da quantidade de produtos para cada fornecedor'
+                        },
+                        plotOptions: {
+                            pie: {
+                                innerSize: '60%'
+                            }
+                        },
+                        exporting: {
+                            enabled : false
+                        },
+                        credits: {
+                            enabled : false
+                        },
+                        series: [{
+                            data: array
+                        }]
+                    })
+                },
+                error: function (e) { //captura a resposta de erro..
+                    console.log(e);
+                }
+            });
+
+        })
+    </script>
+}
+

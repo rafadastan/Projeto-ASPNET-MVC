@@ -1,0 +1,83 @@
+﻿@model ProjetoMVC01.Presentation.Models.FornecedorConsultaViewModel
+
+@{
+    ViewData["Title"] = "Consulta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h5>Consulta de Fornecedores</h5>
+<p>Pesquise os fornecedores desejados:</p>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        @using (Html.BeginForm("Consulta", "Fornecedor", FormMethod.Post))
+        {
+            <label>Nome do Fornecedor:</label>
+            @Html.TextBoxFor(model => model.Nome, new { @class = "form-control" })
+            <div class="text-danger">
+                @Html.ValidationMessageFor(model => model.Nome)
+            </div>
+            <br />
+
+            <input type="submit" value="Pesquisar Fornecedores"
+                   class="btn btn-success" />
+        }
+    </div>
+</div>
+
+@if (Model != null)
+{
+    if (Model.Fornecedores != null && Model.Fornecedores.Count > 0)
+    {
+        <div class="row mt-4">
+            <div class="col-md-12">
+
+                <table id="grid_dados" class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome do Fornecedor</th>
+                            <th>CNPJ</th>
+                            <th>Operações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.Fornecedores)
+                        {
+                            <tr>
+                                <td>@item.Nome</td>
+                                <td>@item.Cnpj</td>
+                                <td>
+                                    <a href="/Fornecedor/Edicao?id=@item.IdFornecedor" 
+                                       class="btn btn-primary btn-sm">
+                                        Alterar
+                                    </a>
+                                    <a href="/Fornecedor/Exclusao?id=@item.IdFornecedor" 
+                                       onclick="return confirm('Deseja excluir o fornecedor @item.Nome?');"
+                                       class="btn btn-danger btn-sm">
+                                        Excluir
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">
+                                Quantidade de registros: @Model.Fornecedores.Count
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+        </div>
+    }
+}
+
+
+
+
+

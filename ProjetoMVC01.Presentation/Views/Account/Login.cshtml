@@ -1,0 +1,73 @@
+﻿@model ProjetoMVC01.Presentation.Models.AccountLoginViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+
+    <!-- folha de estilos do bootstrap -->
+    <link href="~/css/bootstrap.css" rel="stylesheet" />
+
+</head>
+<body class="bg-secondary">
+
+    <div class="row">
+        <div class="col-md-4 offset-4 text-center">
+            @using (Html.BeginForm())
+            {
+                <div class="card mt-5 bg-light">
+                    <div class="card-body text-center">
+
+                        <img src="https://www.cotiinformatica.com.br/imagens/logo-coti-informatica.png"
+                             style="margin: 20px;" />
+
+                        <h5>Autenticação de Usuário</h5>
+                        <br />
+
+                        <label>Email de Acesso:</label>
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                        <div class="text-danger">
+                            @Html.ValidationMessageFor(model => model.Email)
+                        </div>
+                        <br />
+
+                        <label>Senha de Acesso:</label>
+                        @Html.PasswordFor(model => model.Senha, new { @class = "form-control" })
+                        <div class="text-danger">
+                            @Html.ValidationMessageFor(model => model.Senha)
+                        </div>
+                        <br />
+
+                        <div class="d-grid">
+                            <input type="submit" class="btn btn-success" value="Acessar Sistema" />
+                        </div>
+
+                        @if (TempData["MensagemErro"] != null)
+                        {
+                            <div class="alert alert-danger mt-3">
+                                <strong>@TempData["MensagemErro"]</strong>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            }
+
+            <div class="mt-2 text-white">
+                2021 - COTI Informática v1.0
+            </div>
+
+        </div>
+    </div>
+
+    <!-- referencia de JavaScript -->
+    <script src="~/js/bootstrap.js"></script>
+
+</body>
+</html>
